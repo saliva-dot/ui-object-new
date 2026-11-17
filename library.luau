@@ -1,3 +1,13 @@
+--[[
+    kimikahax UI library_object (single file)
+    Recreation of the "kimikahax for Counter-Strike: Global Offensive" menu style:
+      - Open Sans PX (pixel font) for text and a matching pixel bold (embedded) for values/titles,
+        both at TextSize 13 (falls back to Arial when file functions are missing)
+      - flat charcoal panels with 1px dark outline + 1px inner highlight, soft vertical shading
+      - lavender accent (#6869a9) with glowing accent lines on active tabs / section headers
+      - bold outlined slider values that ride the end of the fill
+]]
+
 if getgenv and getgenv().library_object and getgenv().library_object.Unload then
     pcall(getgenv().library_object.Unload, getgenv().library_object)
 end
@@ -50,20 +60,20 @@ local GetHui = function()
 end
 
 local library_object = {
-    Name = "kimikahax",
+    Name = "salvia.client",
 
     Flags = { },
     SetFlags = { },
 
     Theme = {
-        ["Accent"]                  = FromRGB(104, 105, 169),
-        ["Background"]              = FromRGB(17, 19, 19),
-        ["Inline"]                  = FromRGB(22, 25, 25),
-        ["Contrast"]                = FromRGB(26, 28, 28),
-        ["Outline"]                 = FromRGB(10, 11, 11),
-        ["Tab Button Low Contrast"] = FromRGB(14, 16, 16),
-        ["Text Color"]              = FromRGB(200, 200, 200),
-        ["Disabled Text Color"]     = FromRGB(84, 84, 84),
+        ["Accent"]                  = FromRGB(173, 111, 240),
+        ["Background"]              = FromRGB(32, 35, 35),
+        ["Inline"]                  = FromRGB(45, 49, 49),
+        ["Contrast"]                = FromRGB(52, 56, 56),
+        ["Outline"]                 = FromRGB(23, 25, 25),
+        ["Tab Button Low Contrast"] = FromRGB(37, 40, 40),
+        ["Text Color"]              = FromRGB(220, 220, 220),
+        ["Disabled Text Color"]     = FromRGB(120, 120, 120),
         ["Text Border"]             = FromRGB(0, 0, 0),
         ["Risky"]                   = FromRGB(214, 72, 72),
     },
@@ -81,16 +91,16 @@ local library_object = {
         Direction = Enum.EasingDirection.InOut,
     },
 
-    FontSize = 13,
-    BoldFontSize = 13,
+    FontSize = 12,
+    BoldFontSize = 12,
     Font = Font.fromEnum(Enum.Font.Arial),
     BoldFont = Font.fromEnum(Enum.Font.ArialBold),
     MenuKeybind = Enum.KeyCode.Insert,
 
     Folders = {
-        Directory = "kimikahax",
-        Configs = "kimikahax/Configs",
-        Assets = "kimikahax/Assets",
+        Directory = "salvia",
+        Configs = "salvia/Configs",
+        Assets = "salvia/Assets",
     },
 
     GlowSettings = { Animated = false, Speed = 0.35, Darkness = 0.75 },
@@ -227,8 +237,8 @@ end
 
 local BoldFontData = loadstring(game:HttpGet('https://raw.githubusercontent.com/saliva-dot/ui-object-new/refs/heads/main/font-data/base-font.luau'))()
 do
-    local Regular = library_object:LoadFont("kimikahax_regular", "open-sans-px.ttf",
-        "https://github.com/saliva-dot/ui-object-new/blob/main/font-data/open-sans-px.ttf", 400)
+    local Regular = library_object:LoadFont("kimikahax_regular", "open-sans-px.ttf",    
+    "https://github.com/saliva-dot/ui-object-new/blob/main/font-data/open-sans-px.ttf", 400)
     local Bold = library_object:LoadEmbeddedFont("kimikahax_bold", "kimikahax-bold.ttf", BoldFontData, 700)
 
     if Regular then
@@ -787,51 +797,7 @@ function library_object:AccentLine(Parent, Vertical, Position, Size, ZIndex)
     return Line
 end
 
--- The kimikahax bird, rebuilt from the original's pixels (19x17): {row, x, width, transparency}.
--- Pass Icon = "rbxassetid://..." to use an image instead.
-local LogoRuns = {
-    {0,0,2,0.5}, {0,8,1,0.5}, {1,1,3,0.5}, {1,8,2,0.5}, {2,1,4,0.5}, {2,8,3,0.5}, {3,2,5,0.5}, {3,8,2,0.5},
-    {3,10,1,0}, {3,11,1,0.5}, {4,2,8,0.5}, {4,10,2,0}, {4,12,1,0.5}, {5,2,3,0.5}, {5,5,4,0}, {5,9,2,0.5},
-    {5,11,3,0}, {6,2,3,0.5}, {6,5,6,0}, {6,11,1,0.5}, {6,12,2,0}, {6,14,4,0.5}, {7,3,3,0.5}, {7,6,6,0},
-    {7,12,2,0.5}, {7,14,4,0}, {7,18,1,0.5}, {8,4,2,0.5}, {8,6,11,0}, {8,17,2,0.5}, {9,3,3,0.5}, {9,6,10,0},
-    {9,16,1,0.5}, {10,3,3,0.5}, {10,6,8,0}, {10,14,1,0.5}, {11,5,2,0.5}, {11,7,6,0}, {11,13,1,0.5},
-    {12,7,2,0.5}, {12,9,2,0}, {12,11,1,0.5}, {13,8,1,0.5}, {13,9,1,0}, {13,10,1,0.5}, {14,7,3,0.5},
-    {15,7,1,0.5}, {16,6,1,0.5},
-}
 
-function library_object:CreateLogo(Parent, Icon, ZIndex)
-    local Holder = self:Create("Frame", {
-        Parent = Parent,
-        BackgroundTransparency = 1,
-        Size = UDim2New(0, 19, 0, 17),
-        ZIndex = ZIndex or 2,
-    })
-
-    if Icon and Icon ~= "" then
-        self:Create("ImageLabel", {
-            Parent = Holder,
-            BackgroundTransparency = 1,
-            Size = UDim2New(1, 0, 1, 0),
-            Image = Icon,
-            ImageColor3 = self.Theme.Accent,
-            ZIndex = ZIndex or 2,
-        }):Theme({ ImageColor3 = "Accent" })
-        return Holder
-    end
-
-    for _, Run in LogoRuns do
-        self:Create("Frame", {
-            Parent = Holder,
-            Position = UDim2New(0, Run[2], 0, Run[1]),
-            Size = UDim2New(0, Run[3], 0, 1),
-            BackgroundColor3 = self.Theme.Accent,
-            BackgroundTransparency = Run[4] > 0 and 0.45 or 0,
-            ZIndex = ZIndex or 2,
-        }):Theme({ BackgroundColor3 = "Accent" })
-    end
-
-    return Holder
-end
 
 -- Soft dark glow (drop shadow) around a frame, as behind the original watermark.
 -- Darkness = opacity, the animation makes it breathe. Rings sit in a sibling holder so they never
@@ -1084,9 +1050,6 @@ function library_object:Watermark()
     })
     self:Create("UIPadding", { Parent = Content, PaddingLeft = UDimNew(0, 8), PaddingRight = UDimNew(0, 9) })
 
-    local Logo = self:CreateLogo(Content, nil, 4)
-    Logo.Instance.LayoutOrder = 1
-
     local Title = self:Create("TextLabel", {
         Parent = Content,
         Text = self.Name,
@@ -1134,13 +1097,11 @@ function library_object:Watermark()
         if Show("User ID") then TableInsert(Pieces, tostring(LocalPlayer.UserId)) end
         if Show("Local Time") then TableInsert(Pieces, os.date("%H:%M:%S")) end
 
-        Title.Instance.Visible = Show("Title")
-        Logo.Instance.Visible = Show("Title")
-
+        Title.Visible = Show("Title")
         local Text = table.concat(Pieces, " - ")
         if Show("Title") and Text ~= "" then Text = " - " .. Text end
-        Info.Instance.Text = Text
-        Info.Instance.Visible = Text ~= ""
+        Info.Text = Text
+        Info.Visible = Text ~= ""
     end
 
     function Watermark:SetParts(Parts)
@@ -2222,7 +2183,7 @@ function library_object:Window(Data)
     local TitleContent = library_object:Create("Frame", {
         Parent = TitleBar,
         BackgroundTransparency = 1,
-        Position = UDim2New(0, 9, 0, 1),
+        Position = UDim2New(0, 2, 0, 1),
         Size = UDim2New(1, -18, 1, 0),
         ZIndex = 2,
     })
@@ -2234,8 +2195,6 @@ function library_object:Window(Data)
         SortOrder = Enum.SortOrder.LayoutOrder,
     })
 
-    local Logo = library_object:CreateLogo(TitleContent, Data.Icon, 3)
-    Logo.Instance.LayoutOrder = 1
 
     library_object:Create("Frame", { Parent = TitleContent, BackgroundTransparency = 1, Size = UDim2New(0, 7, 0, 1), LayoutOrder = 2 })
 
@@ -3887,4 +3846,5 @@ function library_object:Unload()
 end
 
 if getgenv then getgenv().library_object = library_object end
+
 return library_object
