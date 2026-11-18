@@ -95,7 +95,7 @@ local library_object = {
     BoldFontSize = 12,
     Font = Font.fromEnum(Enum.Font.Arial),
     BoldFont = Font.fromEnum(Enum.Font.ArialBold),
-    MenuKeybind = Enum.KeyCode.Insert,
+    MenuKeybind = Enum.KeyCode.RightAlt,
 
     Folders = {
         Directory = "salvia",
@@ -3730,7 +3730,7 @@ function library_object:CreateSettingsPage(TargetWindow)
     end
 
     -- left: menu
-    local Menu = Settings:Section({ Name = "Menu", Side = 1 })
+    local Menu = Settings:Section({ Name = "Menu", Side = 2 })
 
     Menu:Dropdown({
         Name = "Easing Style",
@@ -3773,34 +3773,12 @@ function library_object:CreateSettingsPage(TargetWindow)
 
     Menu:Button({ Name = "Unload", Confirm = true, Callback = function() self:Unload() end })
 
-    -- right: overlays (no header, as in the original)
-    local Overlay = Settings:Section({ Name = "Overlay", Side = 2, Header = false })
+    -- left: overlays (no header, as in the original)
+    local Overlay = Settings:Section({ Name = "Overlay", Side = 1, Header = false })
     local Watermark = self:Watermark()
     local KeyList = self:KeybindList(false)
 
-    Overlay:Toggle({ Name = "Watermark", Flag = "__settings_watermark", Default = true,
-        Callback = function(Bool) Watermark:SetVisibility(Bool) end })
-
-    Overlay:Dropdown({
-        Name = "Options",
-        Flag = "__settings_watermark_parts",
-        Items = WatermarkParts,
-        Multi = true,
-        Default = { "Title", "Fps", "Ping" },
-        Callback = function(Value) Watermark:SetParts(Value) end,
-    })
-
-    Overlay:Slider({ Name = "Refresh Rate", Flag = "__settings_watermark_rate", Min = 0.05, Max = 1, Decimals = 0.05,
-        Suffix = "s", Default = 0.1, Callback = function(Value) Watermark.RefreshRate = Value end })
-
-    Overlay:Toggle({ Name = "Watermark Glow Animation", Flag = "__settings_glow_animated",
-        Callback = function(Bool) self.GlowSettings.Animated = Bool end })
-
-    Overlay:Slider({ Name = "Watermark Glow Speed", Flag = "__settings_glow_speed", Min = 0.05, Max = 2, Decimals = 0.05,
-        Default = 0.35, Callback = function(Value) self.GlowSettings.Speed = Value end })
-
-    Overlay:Slider({ Name = "Watermark Glow Darkness", Flag = "__settings_glow_darkness", Min = 0, Max = 100, Decimals = 1,
-        Suffix = "%", Default = 75, Callback = function(Value) self.GlowSettings.Darkness = Value / 100 end })
+    Watermark:SetVisibility(false)
 
     Overlay:Toggle({ Name = "Keybind List", Flag = "__settings_keybind_list",
         Callback = function(Bool) KeyList:SetVisibility(Bool) end })
