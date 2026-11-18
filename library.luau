@@ -1,13 +1,3 @@
---[[
-    kimikahax UI library_object (single file)
-    Recreation of the "kimikahax for Counter-Strike: Global Offensive" menu style:
-      - Open Sans PX (pixel font) for text and a matching pixel bold (embedded) for values/titles,
-        both at TextSize 13 (falls back to Arial when file functions are missing)
-      - flat charcoal panels with 1px dark outline + 1px inner highlight, soft vertical shading
-      - lavender accent (#6869a9) with glowing accent lines on active tabs / section headers
-      - bold outlined slider values that ride the end of the fill
-]]
-
 if getgenv and getgenv().library_object and getgenv().library_object.Unload then
     pcall(getgenv().library_object.Unload, getgenv().library_object)
 end
