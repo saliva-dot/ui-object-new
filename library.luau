@@ -243,7 +243,7 @@ do
 
     if Regular then
         library_object.Font = Regular
-        library_object.FontSize = 14
+        library_object.FontSize = 12
     end
 
     if Bold then
